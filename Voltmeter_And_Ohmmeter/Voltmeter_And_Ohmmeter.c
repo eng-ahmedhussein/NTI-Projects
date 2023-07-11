@@ -1,3 +1,10 @@
+/*
+ * Voltmeter_And_Ohmmeter.c
+ *
+ *  Created on: 21/6/2023
+ *      Author: Ahmed Hussein
+ */
+
 #include <util/delay.h>
 
 /* Lib layer */
@@ -20,7 +27,7 @@ int main(void)
 	/*                 SET Ports direction and values                       */
 	/************************************************************************/
 	DIO_u8SetPinDirection(DIO_u8_PORTA,DIO_u8_PIN1,DIO_u8_INPUT);
-	/* initialization the variable and LCD and ADC */
+	/* initialization of the variable and LCD and ADC */
 	u16 ADC_read =0;
 	u16 ReadToTemp =0;
 	u32 ReadAfterLinearFunction=0;
@@ -33,15 +40,15 @@ int main(void)
 	
 	while (1)
 	{
-		/* start convertion of ADC to ger the read*/
+		/* start conversion of ADC to get the read*/
 		ADC_u8GetDigitalValueSynchNonBlocking(ADC_u8_CHANNEL_4,&ADC_read);
 		LCD_voidGotoXY(1,7);
-		/* make the calculation to convert it to celacuis (1C change = 100mV change )*/
+		/* make the calculation to convert it to Celcius (1C change = 100mV change )*/
 		ReadToTemp= ((ADC_read * 5000UL)/1023);
 		/* represent the read on LCD */
 		LCD_VoidNumToString(ReadToTemp);
 		LCD_voidSendString("  mV ");
-		/* make delay to be cleary to see it*/
+		/* make delay to be clear to see it*/
 		//_delay_ms(500);.
 		LCD_voidGotoXY(2,7);
 		Linear_Equation(5000,0,10000,0,ReadToTemp,&ReadAfterLinearFunction);
@@ -51,7 +58,7 @@ int main(void)
 	}
 	
 }
-/* it must put in the servies layer */
+/* it must be put in the service layer */
 void Linear_Equation(u16 Copy_u16Y2,u16 Copy_u16Y1 ,u16 Copy_u16X2,u16 Copy_u16X1, u16 Copy_u16YGiven, u32* Copy_u16_LinearResult)
 {
 	/* Linear Equation (y2 -y1)/(x2-x1)=(y-y1)/(x-x1) */
